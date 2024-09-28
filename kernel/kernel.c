@@ -40,8 +40,13 @@ void kernel_main() {
 }
 */
 
-void kernel_main(){
-    char *video_memory = (char *) 0xb8000;
-    *video_memory = 'X';
-    *(video_memory + 1) = 0x0F;
+void kernel_main()
+{
+    char *video_memory = (char *)0xb8000;
+
+    for(int i=0; i<8*2; i++)
+    {
+        *video_memory = 'X';
+        *(video_memory+1) = 0x17;
+    };
 }

@@ -25,7 +25,7 @@ start:
     int 0x13
     jc disk_error
 
-    cmp al, 1  
+    cmp al, 1
     jne sectors_error
 ; Section 4: Print Success Message
     mov si, success_msg
@@ -52,7 +52,7 @@ sectors_error:
     mov si, SECTORS_ERROR_MSG
     call print_string
     mov dh, al
-    call print_hex_bios      ; This is the number of sectors actually read
+    call print_hex_bios      
     jmp $
 
 ; Section 7: Utility Functions (16-bit mode)
