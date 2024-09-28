@@ -1,18 +1,29 @@
-OUTPUT_FORMAT("binary")
+/* Linker script for the kernel */
+OUTPUT_FORMAT(elf32-i386)
+ENTRY(kernel_main)
 
 SECTIONS
 {
-    . = 0x7C00;                /* Kernel starts at 0x1000 */
-    .text :
+    . = 0x516;  /* This is where we told the bootloader to load our kernel */
+
+    .text BLOCK(4K) : ALIGN(4K)
     {
-        *(.text)               /* Text section contains the code */
+        *(.text)
     }
-    .data :
+
+    .rodata BLOCK(4K) : ALIGN(4K)
     {
-        *(.data)               /* Data section */
+        *(.rodata)
     }
-    .bss :
+
+    .data BLOCK(4K) : ALIGN(4K)
     {
-        *(.bss)                /* BSS section (uninitialized data) */
+        *(.data)
+    }
+
+    .bss BLOCK(4K) : ALIGN(4K)
+    {
+        *(COMMON)
+        *(.bss)
     }
 }
