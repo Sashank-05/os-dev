@@ -1,6 +1,10 @@
 [bits 16]
 
 elevate_bios:
+    ; change vga mode
+    ;mov ah, 0x00
+    ;mov al, 0x13
+    int 0x10
     cli
     lgdt [gdt_32_descriptor]
     mov eax, cr0
