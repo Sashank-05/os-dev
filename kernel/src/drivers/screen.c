@@ -49,7 +49,26 @@ void boot_print_clear() {
 void boot_print(char *str) {
     char *video_memory = (char *)VGA_START;
     int i = 0;
-    int line = curr_line; // local variable to keep track of current line
+    int line = curr_line; 
+    clear_line(line);
+    while (*str != '\0') {
+        video_memory[(line * 80 + i) * 2] = *str;
+        video_memory[(line * 80 + i) * 2 + 1] = 0xF0; 
+        str++;
+        i++;
+    }
+    curr_line++;
+
+    if (curr_line >= 25) {
+        boot_print_clear();
+        curr_line = 10;
+    }
+}
+
+void boot_println(char* str){
+    char *video_memory = (char *)VGA_START;
+    int i = 0;
+    int line = curr_line; // local 
     clear_line(line);
     while (*str != '\0') {
         video_memory[(line * 80 + i) * 2] = *str;
@@ -57,15 +76,11 @@ void boot_print(char *str) {
         str++;
         i++;
     }
-    curr_line++;
-
-    if (curr_line == 25) {
+    if (curr_line >= 25) {
         boot_print_clear();
         curr_line = 10;
     }
 }
-
-
 
 // Function to show the boot screen
 void showboot() {

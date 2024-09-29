@@ -2,7 +2,7 @@
 
 (cd bootloader ; nasm -o boot boot.asm)
 boot_result=$?
-
+(cd kernel; make clean)
 (make -C kernel)
 make_result=$?
 
@@ -27,4 +27,4 @@ else
     echo "Build failed with error code $result. See output for more info."
 fi
 
-qemu-system-i386 -drive format=raw,file=os.img -m 4G
+qemu-system-i386 -drive format=raw,file=os.img -m 4G -usb -device usb-tablet

@@ -101,8 +101,6 @@ void isr_handler(registers_t *r) {
     } else {
         boot_print("Unknown Exception");
     }
-
-    while(1);
     
 }
 
@@ -110,6 +108,12 @@ void register_interrupt_handler(uint8_t n, isr_t handler) {
     interrupt_handlers[n] = handler;
 }
 
+void irq_ack(int irq_no) {
+	if (irq_no >= 12) {
+		port_byte_out(0xA0, 0x20);
+	}
+	port_byte_out(0x20, 0x20);
+}
 
 void irq_handler(registers_t *r) {
     /* Handle the interrupt in a more modular way */

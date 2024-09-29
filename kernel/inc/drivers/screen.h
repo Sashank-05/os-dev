@@ -9,4 +9,4 @@ void clear_line(int line);
 void boot_print(char *str);
 void boot_print_clear();
 void showboot();
-
+void boot_println(char* str);
