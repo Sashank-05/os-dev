@@ -28,7 +28,7 @@ static void keyboard_callback(registers_t *regs) {
     uint8_t scancode = port_byte_in(0x60);
     if (scancode > SC_MAX) return;
     if (scancode == BACKSPACE) {
-        boot_print("Backspace\n");
+        boot_backspace();
     } else if (scancode == ENTER) {
         curr_line++;
         key_buffer[0] = '\0';
@@ -36,7 +36,7 @@ static void keyboard_callback(registers_t *regs) {
         char letter = sc_ascii[(int) scancode];
         append(key_buffer, letter);
         char str[2] = {letter, '\0'};
-        boot_println(key_buffer);
+        boot_println(str);
     }
 }
 
