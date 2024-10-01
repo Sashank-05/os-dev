@@ -70,8 +70,7 @@ void boot_println(char* str){
     char *video_memory = (char *)VGA_START;
     int i = 0;
     int line = curr_line; 
-    clear_line(line);  // Clear the line first
-
+   
     while (i < 80 && video_memory[(line * 80 + i) * 2] != ' ') {
         i++;  // Find the first empty space (i.e., not ' ')
     }
