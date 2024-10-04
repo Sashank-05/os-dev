@@ -1,6 +1,7 @@
 #!/bin/bash
 
-(cd bootloader ; nasm -o boot boot.asm)
+(cd bootloader ; nasm -o boot bootloader.asm)
+#(cd bootloader ; nasm -o boot bootloader.asm)
 boot_result=$?
 (cd kernel; make clean)
 (make -C kernel)

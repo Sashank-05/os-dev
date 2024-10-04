@@ -30,13 +30,15 @@ static void keyboard_callback(registers_t *regs) {
     if (scancode == BACKSPACE) {
         boot_backspace();
     } else if (scancode == ENTER) {
-        curr_line++;
+        // skip 8 lines
+        curr_line += 8;
         key_buffer[0] = '\0';
     } else {
         char letter = sc_ascii[(int) scancode];
         append(key_buffer, letter);
         char str[2] = {letter, '\0'};
         boot_println(str);
+        print_string(0, curr_line, key_buffer, 0x0F);
     }
 }
 

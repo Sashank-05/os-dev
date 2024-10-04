@@ -257,7 +257,7 @@ void set_plane(uint8_t plane) {
 
 void set_mode_13h() {
     // Mode 13h register values
-    static uint8_t g_320x200x256[] = {
+     uint8_t g_320x200x256[] = {
         /* MISC */
         0x63,
         /* SEQ */
@@ -276,6 +276,11 @@ void set_mode_13h() {
         0x41, 0x00, 0x0F, 0x00, 0x00
     };
 
+    __asm__ __volatile__ (
+        "int $0x10"
+        : 
+        : "a"(0x0013)
+    );
     write_registers(g_320x200x256);
 }
 

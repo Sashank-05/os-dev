@@ -46,6 +46,20 @@ void memset(void *dest, int value, unsigned int count)
     }
 }
 
+void set_palette(uint8_t index, uint8_t red, uint8_t green, uint8_t blue) {
+    port_byte_out(0x3C8, index); // Palette index
+    port_byte_out(0x3C9, red);   // Red component
+    port_byte_out(0x3C9, green); // Green component
+    port_byte_out(0x3C9, blue);  // Blue component
+    
+}
+
+void initialize_palette() {
+    for (int i = 0; i < 256; i++) {
+        set_palette(i, i, i, i); // Simple grayscale palette
+    }
+}
+
 int main()
 {
     int y;
@@ -59,22 +73,26 @@ int main()
     showboot();
 
     init_mouse();
-    switch_to_graphics_mode();
+    //switch_to_graphics_mode();
+    //initialize_palette();
     
     graphics_clear(0);
     
 
     
     // Draw a simple pattern
-    for (int i = 0; i < 16; i++) {
-        vga13h_draw_rect(20 + i * 15, 20 + i * 10, 10, 10, i + 1);
+    for (int i = 0; i < 256; i++) {
+        vga13h_draw_rect(10 + i * 5, 10 + i * 3, 2, 2, i + 1);
     }
     
-    vga13h_draw_line(0, 0, 319, 199, 15);
+    //vga13h_draw_line(0, 0, 319, 199, 15);
 
-    print_string(10, 10, "Hello from VGA!!", 26);
+    
 
+   // for(y = 0; y < 200; y++)
+     //   memset((char *)0xA0000 + (y*320+80), y, 160);
 
+    print_string(10, 10, "Hello from VGA!!", 10);
     return 0;
 
 }
