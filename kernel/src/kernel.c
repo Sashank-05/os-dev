@@ -4,20 +4,8 @@
 #include <cpu/timer.h>
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
-#include <cpu/pic.h>
-#include <cpu/cpuid.h>
 #include <util.h>
 #include <drivers/vga.h>
-
-
-typedef struct __attribute__((packed))
-{
-    unsigned short di, si, bp, sp, bx, dx, cx, ax;
-    unsigned short gs, fs, es, ds, eflags;
-} regs16_t;
-
-// tell compiler our int32 function is external
-extern void int32(unsigned char intnum, regs16_t *regs);
 
 void sleep(int seconds)
 {
@@ -46,36 +34,17 @@ void memset(void *dest, int value, unsigned int count)
     }
 }
 
-void set_palette(uint8_t index, uint8_t red, uint8_t green, uint8_t blue) {
-    port_byte_out(0x3C8, index); // Palette index
-    port_byte_out(0x3C9, red);   // Red component
-    port_byte_out(0x3C9, green); // Green component
-    port_byte_out(0x3C9, blue);  // Blue component
-    
-}
 
-void initialize_palette() {
-    for (int i = 0; i < 256; i++) {
-        set_palette(i, i, i, i); // Simple grayscale palette
-    }
-}
 
 int main()
 {
     int y;
-    regs16_t regs;
-    init_pic();
     isr_install();
     asm volatile("sti");
     init_keyboard();
     clear();
-
     showboot();
-
-    init_mouse();
-    //switch_to_graphics_mode();
-    //initialize_palette();
-    
+    init_mouse();    
     graphics_clear(0);
     
 
@@ -85,8 +54,14 @@ int main()
         vga13h_draw_rect(10 + i * 5, 10 + i * 3, 2, 2, i + 1);
     }
     
-    //vga13h_draw_line(0, 0, 319, 199, 15);
+    //vga13h_draw_line(0, 0, 320, 199, 15);
 
+    // make a rectangle of 256 * 256 pixels of all colors
+    for (int i = 32; i < 64; i++) {
+         for (int j = 32; j < 64; j++) {
+                vga13h_putpixel(5+i, 5+j, i);
+            }
+    }
     
 
    // for(y = 0; y < 200; y++)
