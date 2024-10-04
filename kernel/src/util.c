@@ -46,6 +46,12 @@ bool backspace(char s[]) {
     }
 }
 
+double abs(double n) {
+    return n < 0 ? -n : n;
+}
+
+
+
 /* K&R
  * Returns <0 if s1<s2, 0 if s1==s2, >0 if s1>s2 */
 int compare_string(char s1[], char s2[]) {

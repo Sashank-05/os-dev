@@ -3,6 +3,7 @@
         "string.h": "c",
         "screen.h": "c",
         "isr.h": "c",
-        "io.h": "c"
+        "io.h": "c",
+        "vga.h": "c"
     }
 }
