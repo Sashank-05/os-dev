@@ -10,7 +10,7 @@ kernel_size db 0
 real:
     mov bp, 0x0500              ; Set up base pointer
     mov sp, bp                  ; Set stack pointer
-    mov byte [drive], dl   ; Store boot drive number
+    mov byte [drive], dl        ; Store boot drive number
     mov bx, 0x0002              ; Starting sector to load from
     mov cx, [kernel_size]       ; Get kernel size
     add cx, 2                   ; Adjust size for sectors
@@ -33,12 +33,12 @@ load_kernel:
     mov bx, dx                  ; Memory address to load
     mov ch, 0x00                ; Cylinder number
     mov dh, 0x00                ; Head number
-    mov dl, byte [drive]   ; Boot drive
+    mov dl, byte [drive]        ; Boot drive
     int 0x13                    ; BIOS interrupt for disk services
-    jc disk_error          ; Jump if there's an error
+    jc disk_error               ; Jump if there's an error
     pop bx
     cmp al, bl
-    jne disk_error         ; Error if read doesn't match
+    jne disk_error              ; Error if read doesn't match
     pop dx
     pop cx
     pop bx
