@@ -93,7 +93,7 @@ void isr_handler(registers_t *r) {
     boot_print("received interrupt: ");
     
     char s[3];  // Updated buffer size
-    int_to_string(r->int_no, s);
+    itoa(r->int_no, s);
     boot_print(s);  // Print interrupt number
    
     if (r->int_no < 32) {  // Ensure the exception message index is within bounds

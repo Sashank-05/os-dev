@@ -16,19 +16,41 @@ void reverse(char s[]) {
     }
 }
 
-void int_to_string(int n, char str[]) {
+void atoi(char s[], int *n) {
+    *n = 0;
+    for (int i = 0; s[i] != '\0'; i++) {
+        *n = *n * 10 + s[i] - '0';
+    }
+}
+
+void itoa(int n, char s[]) {
     int i, sign;
     if ((sign = n) < 0) n = -n;
     i = 0;
     do {
-        str[i++] = n % 10 + '0';
+        s[i++] = n % 10 + '0';
     } while ((n /= 10) > 0);
-
-    if (sign < 0) str[i++] = '-';
-    str[i] = '\0';
-
-    reverse(str);
+    if (sign < 0) s[i++] = '-';
+    s[i] = '\0';
+    reverse(s);
 }
+
+
+void htoa(int n, char s[]) {
+    int i, sign;
+    if ((sign = n) < 0) n = -n;
+    i = 0;
+    do {
+        s[i] = n % 16 + '0';
+        if (s[i] > '9') s[i] += 7;
+        i++;
+    } while ((n /= 16) > 0);
+    if (sign < 0) s[i++] = '-';
+    s[i] = '\0';
+    reverse(s);
+}
+
+
 
 void append(char s[], char n) {
     int len = string_length(s);

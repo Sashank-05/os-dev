@@ -12,7 +12,7 @@ static void timer_callback(registers_t *regs) {
     boot_print("Tick: ");
 
     char tick_ascii[256];
-    int_to_string(tick, tick_ascii);
+    itoa(tick, tick_ascii);
     boot_print(tick_ascii);
     boot_print("\n");
 }

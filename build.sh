@@ -27,5 +27,5 @@ else
     result=`expr $boot_result + $make_result`
     echo "Build failed with error code $result. See output for more info."
 fi
-
-qemu-system-i386 -drive format=raw,file=os.img -m 4G -usb -device usb-tablet
+rm -f *.o **/*.o **/**/*.o
+qemu-system-i386 -drive format=raw,file=os.img -m 64M -usb -device usb-tablet
