@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "stddef.h": "c",
+        "kernel.h": "c",
+        "sys.h": "c",
+        "stdbool.h": "c",
+        "3270_font.h": "c",
+        "stdint.h": "c",
+        "ssfn.h": "c"
+    }
+}
