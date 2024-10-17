@@ -61,7 +61,7 @@ override KNASMFLAGS += \
 # Internal linker flags that should not be changed by the user.
 override KLDFLAGS += \
     -m elf_x86_64 \
-    -nostdlib \
+        -nostdlib \
     -static \
     -z max-page-size=0x1000 \
     -T linker.ld \

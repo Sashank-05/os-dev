@@ -6,6 +6,10 @@
         "stdbool.h": "c",
         "3270_font.h": "c",
         "stdint.h": "c",
-        "ssfn.h": "c"
+        "ssfn.h": "c",
+        "limine.h": "c",
+        "mem.h": "c",
+        "font.h": "c",
+        "io.h": "c"
     }
 }

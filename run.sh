@@ -18,5 +18,10 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Run the ISO image in QEMU
-qemu-system-x86_64 -cdrom image.iso
+# Run the ISO image in QEMU with 1920x1080 resolution
+
+qemu-system-x86_64 -cdrom image.iso -m 2048 -smp 2 \
+-display sdl,gl=on -vga std \
+-vga std -monitor stdio -m 4G \
+-bios /usr/share/OVMF/OVMF_CODE.fd \
+-boot d

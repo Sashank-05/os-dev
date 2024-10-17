@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include <limine.h>
 #include <mem.h>
-#include <sys.h>
 #include <kernel.h>
 
 // Set the base revision to 2, this is recommended as this is the latest
@@ -38,6 +37,7 @@ static void hcf(void) {
     }
 }
 
+
 // The following will be our kernel's entry point.
 // If renaming kmain() to something else, make sure to change the
 // linker script accordingly.
@@ -54,6 +54,10 @@ void kmain(void) {
 
     // Fetch the first framebuffer.
     framebuffer = framebuffer_request.response->framebuffers[0];
+
+    // set color
+    for (size_t i = 0; i < framebuffer->height * framebuffer->pitch / 4; i++)
+        ((uint32_t *)framebuffer->address)[i] = 0x1F1F1F;
 
     // Note: we assume the framebuffer model is RGB with 32-bit pixels.
     main(framebuffer);
