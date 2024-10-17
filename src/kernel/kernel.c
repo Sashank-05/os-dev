@@ -18,8 +18,8 @@ extern unsigned char _binary_unifont_sfn_start;
 // extern char _binary_font_psf_start[];
 extern char _binary_font_psf_end;
 
-extern unsigned int cursorx;
-extern unsigned int cursory;
+unsigned int cursorx=0;
+unsigned int cursory=0;
 
 int font_height;
 
