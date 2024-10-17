@@ -19,8 +19,8 @@ extern unsigned char _binary_font_psf_start[];
 
 int main(struct limine_framebuffer *framebuffer);
 
-static unsigned int cursorx = 0;
-static unsigned int cursory = 0;
+extern unsigned int cursorx;
+extern unsigned int cursory;
 
 
 #endif
