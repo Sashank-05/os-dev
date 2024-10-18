@@ -6,24 +6,35 @@
 #include <isr.h>
 #include <stdint.h>
 
+const char *sc_name[] = {"ERROR", "Esc", "1", "2", "3", "4", "5", "6",
+                         "7", "8", "9", "0", "-", "=", "Backspace", "Tab", "Q", "W", "E",
+                         "R", "T", "Y", "U", "I", "O", "P", "[", "]", "Enter", "Lctrl",
+                         "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "`",
+                         "LShift", "\\", "Z", "X", "C", "V", "B", "N", "M", ",", ".",
+                         "/", "RShift", "Keypad *", "LAlt", "Spacebar"};
+const char sc_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
+                         '7', '8', '9', '0', '-', '=', '?', '?', 'Q', 'W', 'E', 'R', 'T', 'Y',
+                         'U', 'I', 'O', 'P', '[', ']', '?', '?', 'A', 'S', 'D', 'F', 'G',
+                         'H', 'J', 'K', 'L', ';', '\'', '`', '?', '\\', 'Z', 'X', 'C', 'V',
+                         'B', 'N', 'M', ',', '.', '/', '?', '?', '?', ' '};
+
 static void kb_callback(registers_t *regs)
 {
     uint8_t scancode = inb(0x60);
-    char s[21];
-    itoa(scancode, s);
-
-    if (scancode == 0x1C)
-    {
-        print_string(&cursorx, &cursory, "Enter", 0xFFFFFF);
-        clearscreen(0x0F0F0F);
-        return;
+    if (scancode <= 57){
+        if (scancode == 28)
+        {
+            print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+        }
+        else
+        {
+            char str[2] = {sc_ascii[scancode], '\0'};
+            print_string(&cursorx, &cursory, str, 0xFFFFFF);
+        }
+        //print_string(&cursorx, &cursory, sc_name[scancode], 0xFFFFFF);
     }
-    else
-    {
-        print_string(&cursorx, &cursory, "Keycode: ", 0xFFFFFF);
-    }
+    
 
-    print_string(&cursorx, &cursory, s, 0xFFFFFF);
 }
 
 void kb_install()

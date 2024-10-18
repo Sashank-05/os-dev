@@ -10,6 +10,7 @@
         "limine.h": "c",
         "mem.h": "c",
         "font.h": "c",
-        "io.h": "c"
+        "io.h": "c",
+        "boot_print.h": "c"
     }
 }

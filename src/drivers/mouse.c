@@ -7,6 +7,13 @@
 #include <idt.h>
 #include <isr.h>
 #include <io.h>
+#include <mouse.h>
+
+uint8_t cycle = 0;
+
+struct mouse_state currstate = {
+    0,0,0,false,false,false
+};
 
 void mouse_callback(registers_t *regs){
     print_string(&cursorx, &cursory, "Mouse input", 0xFFFFFF);
@@ -15,6 +22,13 @@ void mouse_callback(registers_t *regs){
         int8_t mouse_in = inb(0x60);
 
         if (status & 0x20){
+
+            switch(cycle){
+                case 0: 
+                    
+
+            }
+
 
         }
         status = inb(0x64);
