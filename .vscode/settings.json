@@ -11,6 +11,7 @@
         "mem.h": "c",
         "font.h": "c",
         "io.h": "c",
-        "boot_print.h": "c"
+        "boot_print.h": "c",
+        "timer.h": "c"
     }
 }

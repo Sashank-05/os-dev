@@ -11,6 +11,7 @@
 #include <isr.h>
 #include <drivers/kb.h>
 #include <drivers/mouse.h>
+#include <timer.h>
 
 // extern ssfn_font_t _binary_3270_sfn_start;
 extern unsigned char _binary_unifont_sfn_start;
@@ -24,6 +25,14 @@ unsigned int cursory=0;
 int font_height;
 
 
+void roundrobin()
+{
+    print_string(&cursorx, &cursory, "Round Robin\n", 0xFFFFFF);
+}
+
+void timer_2(){
+    print_string(&cursorx, &cursory, "Timer 2\n", 0xFFFFFF);
+}
 
 
 int main(struct limine_framebuffer *framebuffer)
@@ -109,6 +118,13 @@ int main(struct limine_framebuffer *framebuffer)
 
     // raise an isr
     //asm volatile("int $0x10");
+
+    init_hardware_timer(1000);
+
+    // init round robin of time quantum 100ms
+
+    add_timer(100, roundrobin);
+    add_timer(500, timer_2);
 
     return 0;
 }
