@@ -78,7 +78,7 @@ void kb_install()
         {
             print_string(&cursorx, &cursory, "Keyboard self test failed\n", 0xFFFFFF);
         }
-        clearscreen(0x0F0F0F);
+        //clearscreen(0x0F0F0F);
     }
 
     register_interrupt_handler(IRQ1, kb_callback);

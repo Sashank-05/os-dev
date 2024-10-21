@@ -20,8 +20,9 @@ fi
 
 # Run the ISO image in QEMU with 1920x1080 resolution
 
-qemu-system-x86_64 -cdrom image.iso -m 2048 -smp 2 \
+qemu-system-x86_64 -cdrom image.iso -m 4G -smp 2 \
 -display sdl,gl=on -vga std \
--vga std -monitor stdio -m 4G \
--bios /usr/share/OVMF/OVMF_CODE.fd \
+-monitor stdio \
+-drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE.fd \
+-drive if=pflash,format=raw,file=/usr/share/OVMF/OVMF_VARS_4M.fd \
 -boot d

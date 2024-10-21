@@ -23,6 +23,9 @@ unsigned int cursory=0;
 
 int font_height;
 
+
+
+
 int main(struct limine_framebuffer *framebuffer)
 {
     framebuffer = framebuffer;
@@ -99,6 +102,13 @@ int main(struct limine_framebuffer *framebuffer)
     {
         print_string(&cursorx, &cursory, boot_message[i], 0xFFFFFF);
     }
-    
+
+    print_string(&cursorx, &cursory, "Cursor init, disabling it temporarily", 0x0F01F0);
+
+    // disable cursor
+
+    // raise an isr
+    //asm volatile("int $0x10");
+
     return 0;
 }

@@ -10,7 +10,8 @@
 extern int curr_line;
 isr_t interrupt_handlers[256];
 
-void isr_install() {
+void isr_install()
+{
     // Update to use 64-bit function pointers
     set_idt_gate(0, (uint64_t)isr0);
     set_idt_gate(1, (uint64_t)isr1);
@@ -87,42 +88,165 @@ char *exception_messages[] = {
     "Coprocessor Fault", "Alignment Check", "Machine Check", "Reserved",
     "Reserved", "Reserved", "Reserved", "Reserved",
     "Reserved", "Reserved", "Reserved", "Reserved", "Reserved",
-    "Reserved", "Reserved"
-};
+    "Reserved", "Reserved"};
 
+void isr_handler(registers_t *r)
+{
+    clearscreen(0xF000FA);
 
-void isr_handler(registers_t *r) {
-    clearscreen(0xF0F0F0);
-    char s[21];  // Increased buffer size to accommodate 64-bit numbers
-    itoa(r->int_no, s);
-    print_string(&cursorx, &cursory, s, 0xFFFFFF);  // Print interrupt number
-   
-    if (r->int_no < 32) {
-        print_string(&cursorx, &cursory,  exception_messages[r->int_no], 0xFFFFFF);
-    } else {
-        print_string(&cursorx, &cursory, "Unknown interrupt\n", 0xFFFFFF);
+    // set cursors to 0
+    cursorx = 0;
+    cursory = 0;
+
+    char int_no_str[21]; // Buffer for interrupt number
+    itoa(r->int_no, int_no_str);
+
+    // print a nice message
+    print_string(&cursorx, &cursory, "Kernel Error!\n\n", 0xFFFFFF);
+
+    // Print the interrupt number
+    print_string(&cursorx, &cursory, "Interrupt Number: ", 0xFFFFFF);
+    print_string(&cursorx, &cursory, int_no_str, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+
+    // Print error code if applicable
+    if (r->int_no < 32)
+    {                            // Check if it's an exception
+        char error_code_str[21]; // Buffer for error code
+        itoa(r->error_code, error_code_str);
+        print_string(&cursorx, &cursory, "Error Code: ", 0xFFFFFF);
+        print_string(&cursorx, &cursory, error_code_str, 0xFFFFFF);
+        print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
     }
+    if (r->int_no < 32)
+    {
+        print_string(&cursorx, &cursory, exception_messages[r->int_no], 0xFF0000);
+        print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    }
+    else
+    {
+        print_string(&cursorx, &cursory, "Unknown interrupt\n", 0xFF0000);
+        print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    }
+
+    // Print register information
+    char hex_buffer[20]; // Buffer for hexadecimal conversion
+
+    print_string(&cursorx, &cursory, "Registers:\n", 0xFFFFFF);
+
+    htoa(r->rax, hex_buffer);
+    print_string(&cursorx, &cursory, "RAX: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->rbx, hex_buffer);
+    print_string(&cursorx, &cursory, "RBX: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->rcx, hex_buffer);
+    print_string(&cursorx, &cursory, "RCX: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->rdx, hex_buffer);
+    print_string(&cursorx, &cursory, "RDX: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->rsi, hex_buffer);
+    print_string(&cursorx, &cursory, "RSI: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->rdi, hex_buffer);
+    print_string(&cursorx, &cursory, "RDI: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->rbp, hex_buffer);
+    print_string(&cursorx, &cursory, "RBP: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->rsp, hex_buffer);
+    print_string(&cursorx, &cursory, "RSP: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->r8, hex_buffer);
+    print_string(&cursorx, &cursory, "R8: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->r9, hex_buffer);
+    print_string(&cursorx, &cursory, "R9: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->r10, hex_buffer);
+    print_string(&cursorx, &cursory, "R10: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->r11, hex_buffer);
+    print_string(&cursorx, &cursory, "R11: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->r12, hex_buffer);
+    print_string(&cursorx, &cursory, "R12: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->r13, hex_buffer);
+    print_string(&cursorx, &cursory, "R13: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->r14, hex_buffer);
+    print_string(&cursorx, &cursory, "R14: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->r15, hex_buffer);
+    print_string(&cursorx, &cursory, "R15: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->rip, hex_buffer);
+    print_string(&cursorx, &cursory, "RIP: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->rflags, hex_buffer);
+    print_string(&cursorx, &cursory, "RFLAGS: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->cs, hex_buffer);
+    print_string(&cursorx, &cursory, "CS: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    // htoa(r->ds, hex_buffer); print_string(&cursorx, &cursory, "DS: 0x", 0xFFFFFF); print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+    htoa(r->ss, hex_buffer);
+    print_string(&cursorx, &cursory, "SS: 0x", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hex_buffer, 0xFFFFFF);
+    print_string(&cursorx, &cursory, "\n", 0xFFFFFF);
+
+    while (1)
+    {
+        asm volatile("hlt");
+    };
 }
 
-void register_interrupt_handler(uint8_t n, isr_t handler) {
+void register_interrupt_handler(uint8_t n, isr_t handler)
+{
     interrupt_handlers[n] = handler;
 }
 
-void irq_ack(int irq_no) {
-    if (irq_no >= 12) {
+void irq_ack(int irq_no)
+{
+    if (irq_no >= 12)
+    {
         outb(0xA0, 0x20);
     }
     outb(0x20, 0x20);
 }
 
-void irq_handler(registers_t *r) {
-    if (interrupt_handlers[r->int_no] != 0) {
+void irq_handler(registers_t *r)
+{
+    if (interrupt_handlers[r->int_no] != 0)
+    {
         isr_t handler = interrupt_handlers[r->int_no];
         handler(r);
     }
 
     // EOI
-    if (r->int_no >= 40) {
+    if (r->int_no >= 40)
+    {
         outb(0xA0, 0x20); /* follower */
     }
     outb(0x20, 0x20); /* leader */
