@@ -20,6 +20,10 @@ fi
 
 # Run the ISO image in QEMU with 1920x1080 resolution
 
+#make clean
+#rm -rf iso_root 
+#rm -rf obj
+
 qemu-system-x86_64 -cdrom image.iso -m 4G -smp 2 \
 -display sdl,gl=on -vga std \
 -monitor stdio \

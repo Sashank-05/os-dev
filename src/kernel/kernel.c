@@ -19,19 +19,86 @@ extern unsigned char _binary_unifont_sfn_start;
 // extern char _binary_font_psf_start[];
 extern char _binary_font_psf_end;
 
-unsigned int cursorx=0;
-unsigned int cursory=0;
+unsigned int cursorx = 0;
+unsigned int cursory = 0;
 
 int font_height;
+
+void wait_for_rtc_update()
+{
+    outb(0x70, 0x0A);
+    while (inb(0x71) & 0x80)
+        ;
+}
+
+uint8_t read_rtc_register(int reg)
+{
+    outb(0x70, reg);
+    return inb(0x71);
+}
+
+uint8_t bcd_to_bin(uint8_t value)
+{
+    return (value & 0x0F) + ((value / 16) * 10);
+}
+
+uint8_t bin_to_bcd(uint8_t value)
+{
+    return ((value / 10) * 16) + (value % 10);
+}
+
+void print_time() {
+    wait_for_rtc_update();
+
+    // Prepare buffers for the time values
+    char seconds[3];
+    char minutes[3];
+    char hours[3];
+
+    // Convert BCD to string representations
+    itoa(bcd_to_bin(read_rtc_register(0x00)), seconds);
+    itoa(bcd_to_bin(read_rtc_register(0x02)), minutes);
+    itoa(bcd_to_bin(read_rtc_register(0x04)), hours);
+
+    // Set cursor to the desired position
+    int curcopy[] = {cursorx, cursory};
+    cursorx = framebuffer->width - 500; // Adjust x position as needed
+    cursory = framebuffer->height - 200; // Adjust y position as needed
+
+    // Clear the current line by overwriting with spaces
+    print_string(&cursorx, &cursory, "                                       ", 0x0F0F0F0F);  
+
+    // Reset cursor position
+    cursorx = framebuffer->width - 500; // Reset x position
+    cursory = framebuffer->height - 200; // Reset y position
+
+    // Print the time in the desired format
+    print_string(&cursorx, &cursory, "Time: ", 0xFFFFFF);
+    print_string(&cursorx, &cursory, hours, 0xFFFFFF);
+    print_string(&cursorx, &cursory, ":", 0xFFFFFF);
+    print_string(&cursorx, &cursory, minutes, 0xFFFFFF);
+    print_string(&cursorx, &cursory, ":", 0xFFFFFF);
+    print_string(&cursorx, &cursory, seconds, 0xFFFFFF);
+
+    // Reset the cursor to original position
+    cursorx = curcopy[0];
+    cursory = curcopy[1];
+}
 
 
 void roundrobin()
 {
-    print_string(&cursorx, &cursory, "Round Robin\n", 0xFFFFFF);
-}
+    int cursorcopyx = cursorx;
+    int cursorcopyy = cursory;
 
-void timer_2(){
-    print_string(&cursorx, &cursory, "Timer 2\n", 0xFFFFFF);
+    cursorx = framebuffer->width - 200;
+    cursory = framebuffer->height - 100;
+    print_string(&cursorx, &cursory, "Round Robin\n", 0xFF0000);
+    cursorx = framebuffer->width - 200;
+    cursory = framebuffer->height - 100;
+    print_string(&cursorx, &cursory, "Round Robin\n", 0xFFFFFF);
+    cursorx = cursorcopyx;
+    cursory = cursorcopyy;
 }
 
 
@@ -40,7 +107,6 @@ int main(struct limine_framebuffer *framebuffer)
     framebuffer = framebuffer;
 
     init_back_framebuffer();
-    
 
     // print_string(cursor_x, cursor_y, "Hello, World!", 0xFFFFFF);
     //  set font height to 16
@@ -49,8 +115,6 @@ int main(struct limine_framebuffer *framebuffer)
     print_string(&cursorx, &cursory, "Hello, World!\n", 0xFFFFFF);
 
     print_string(&cursorx, &cursory, "Hello, World once again", 0xFFFFFF);
-
-
 
     clearscreen(0x0F0F0F0F);
 
@@ -103,7 +167,7 @@ int main(struct limine_framebuffer *framebuffer)
         asm("nop");
     }
 
-    //clearscreen(0x000000);
+    // clearscreen(0x000000);
 
     init_mouse();
 
@@ -117,14 +181,15 @@ int main(struct limine_framebuffer *framebuffer)
     // disable cursor
 
     // raise an isr
-    //asm volatile("int $0x10");
+    // asm volatile("int $0x10");
 
     init_hardware_timer(1000);
 
     // init round robin of time quantum 100ms
 
     add_timer(100, roundrobin);
-    add_timer(500, timer_2);
+    add_timer(500, print_time);
 
     return 0;
 }
+

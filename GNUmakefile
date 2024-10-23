@@ -3,7 +3,7 @@ MAKEFLAGS += -rR
 
 # This is the name that our final executable will have.
 # Change as needed.
-override OUTPUT := myos
+override OUTPUT := sasos
 
 # Convenience macro to reliably declare user overridable variables.
 override USER_VARIABLE = $(if $(filter $(origin $(1)),default undefined),$(eval override $(1) := $(2)))

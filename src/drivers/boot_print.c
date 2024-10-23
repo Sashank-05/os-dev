@@ -41,13 +41,11 @@ void draw_char(unsigned int x, unsigned int y, unsigned char c, uint32_t color) 
 }
 
 void print_string(unsigned int *x, unsigned int *y, const char* s, uint32_t color) {
-    // check if cursor is at the end of the screen (height)
 
     if(*y + 16 > linearframebuffer->height) {
         *y = 0;
         clearscreen(0x0F0F0F0F);
     }
-
     while (*s) {
         if (*s == '\n') {
             *x = 0;
