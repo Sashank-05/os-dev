@@ -33,10 +33,3 @@ void usb_write(uint8_t data) {
     outb(USB_BASE + 2, data); // Write data to the data port
 }
 
-// Main function for testing
-int main() {
-    usb_init();
-    usb_write(0xAB);
-    uint8_t data = usb_read();
-    return 0;
-}

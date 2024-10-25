@@ -12,6 +12,8 @@
 #include <drivers/kb.h>
 #include <drivers/mouse.h>
 #include <timer.h>
+#include "dwm/dwm.h"
+
 
 // extern ssfn_font_t _binary_3270_sfn_start;
 extern unsigned char _binary_unifont_sfn_start;
@@ -57,8 +59,8 @@ void print_time() {
 
     // Convert BCD to string representations
     itoa(bcd_to_bin(read_rtc_register(0x00)), seconds);
-    itoa(bcd_to_bin(read_rtc_register(0x02)), minutes);
-    itoa(bcd_to_bin(read_rtc_register(0x04)), hours);
+    itoa(bcd_to_bin(read_rtc_register(0x02))+30, minutes);
+    itoa(bcd_to_bin(read_rtc_register(0x04))+5, hours);
 
     // Set cursor to the desired position
     int curcopy[] = {cursorx, cursory};
@@ -188,7 +190,9 @@ int main(struct limine_framebuffer *framebuffer)
     // init round robin of time quantum 100ms
 
     add_timer(100, roundrobin);
-    add_timer(500, print_time);
+    add_timer(1, print_time);
+
+
 
     return 0;
 }

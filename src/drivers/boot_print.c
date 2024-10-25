@@ -54,6 +54,16 @@ void print_string(unsigned int *x, unsigned int *y, const char* s, uint32_t colo
             continue;
         }
 
+        if (*s == ' '){
+            // make clear 8*16 space
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 16; j++) {
+                    // invert color 
+                    draw_pixel(*x + i, *y + j,0x0F0F0F);
+                }
+            }
+        }
+
         if (*x + 8 > linearframebuffer->width) {
             *x = 0;
             *y += 16;

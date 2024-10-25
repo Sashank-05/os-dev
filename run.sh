@@ -29,4 +29,5 @@ qemu-system-x86_64 -cdrom image.iso -m 4G -smp 2 \
 -monitor stdio \
 -drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE.fd \
 -drive if=pflash,format=raw,file=/usr/share/OVMF/OVMF_VARS_4M.fd \
--boot d
+-boot d \
+-rtc base=localtime,clock=host \
