@@ -1,6 +1,6 @@
-global _load_gdt_and_tss_asm
+global _load_gdt
 
-_load_gdt_and_tss_asm:
+_load_gdt:
     lgdt    [rdi]	; load GDT -> rdi is the first argument passed
 			; _load_gdt_and_tss_asm(struct GDT_Pointer *ptr)
 

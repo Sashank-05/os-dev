@@ -12,6 +12,8 @@
         "font.h": "c",
         "io.h": "c",
         "boot_print.h": "c",
-        "timer.h": "c"
+        "timer.h": "c",
+        "animate.h": "c",
+        "cstdlib": "cpp"
     }
 }

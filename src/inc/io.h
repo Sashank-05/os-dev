@@ -34,4 +34,3 @@ inline uint32_t inl(uint16_t port) {
 inline void wait(void) {
     outb(0x80, 0);
 }
-

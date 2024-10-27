@@ -1,18 +1,14 @@
-#include <stdint.h>
-#include <stddef.h>
-#include <stdbool.h>
-#include <mem.h>
-#include <limine.h>
-#include <kernel.h>
-#include <boot_print.h>
-#include <gdt.h>
+#include <cpu/gdt.h>
+#include <global.h>
 
+extern void _load_gdt(struct GDT_Pointer *gdt_pointer);
 
-static struct TSS	    tss;
-static struct GDT	    gdt;
+static struct GDT gdt;
+static struct TSS tss;
 static struct GDT_Pointer   gdt_pointer;
 
-// set the arguments for a given segment
+
+
 void create_descriptors(void)
 {
     // 0x00: null
@@ -96,7 +92,6 @@ void create_descriptors(void)
     gdt.tss_high.base_31_24			    = 0;
 }
 
-// create descriptors and load GDT and TSS
 void gdt_init(void)
 {
     create_descriptors();
@@ -117,6 +112,5 @@ void gdt_init(void)
     gdt_pointer.limit	= sizeof(gdt) - 1;
     gdt_pointer.base	= (uint64_t)&gdt;
 
-    _load_gdt_and_tss_asm(&gdt_pointer);
-
+    _load_gdt(&gdt_pointer);
 }
