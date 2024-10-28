@@ -43,21 +43,27 @@ void kmain(void)
 
     framebuffer = framebuffer_request.response->framebuffers[0];
 
-    if (init_graphics() == ERR_INVALID_FRAMEBUFFER || init_graphics() == ERR_UNSUPPORTED_BPP){
-        // beep 
-
+    if (init_graphics() == ERR_INVALID_FRAMEBUFFER || init_graphics() == ERR_UNSUPPORTED_BPP)
+    {
+        // beep
     }
 
     gdt_init();
 
     display_vendor_logo();
-    while (true)
+    int framescount = 0;
+    while (framescount < 48 )
     {
         draw_frame(&frame);
         for (int i = 0; i < 100000000; i++)
         {
             asm("nop");
         }
+        framescount++;
     }
+
+    // call kernel.c
+    main();
+    
     hcf();
 }

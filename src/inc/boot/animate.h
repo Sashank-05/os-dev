@@ -3180,6 +3180,18 @@ int frames[48][64][64] = {
         {True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True},
         {True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True}}};
 
+inline void draw_pixel(unsigned int x, unsigned int y, uint32_t color)
+{
+    if (x >= framebuffer->width || y >= framebuffer->height)
+    {
+        return;
+    }
+
+    size_t pixel_offset = y * framebuffer->pitch + x * (framebuffer->bpp / 8);
+    uint32_t *fb_ptr = (uint32_t *)((uint8_t *)framebuffer->address + pixel_offset);
+    *fb_ptr = color;
+}
+
 inline void draw_frame(int *frame_index)
 {
     extern struct limine_framebuffer *framebuffer; // Assuming framebuffer is declared and defined elsewhere
@@ -3202,7 +3214,7 @@ inline void draw_frame(int *frame_index)
         for (int x = 0; x < frame_width; x++)
         {
             // Ensure pixel calculations are within framebuffer bounds
-            if (start_y + y < framebuffer->height && start_x + x >= 0 && start_x + x < framebuffer->width)
+            if ((uint64_t)(start_y + y) < framebuffer->height && (uint64_t)(start_x + x) < framebuffer->width)
             {
                 size_t pixel_index = ((start_y + y) * framebuffer->pitch / 4) + (start_x + x); // Correct pixel index calculation
 
@@ -3214,6 +3226,5 @@ inline void draw_frame(int *frame_index)
 
     *frame_index = (*frame_index + 1) % 48;
 }
-
 
 #endif // animate_h

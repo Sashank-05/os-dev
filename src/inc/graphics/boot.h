@@ -11,6 +11,7 @@ static inline int init_graphics(void) {
     } elif (framebuffer->bpp != 32) {
         return ERR_UNSUPPORTED_BPP;
     }
+    return 0;
 };
 
 #endif // GRAPHICS_BOOT_H
