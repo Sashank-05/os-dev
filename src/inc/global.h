@@ -31,6 +31,11 @@ void print(char *str);
 
 // gfx
 
+enum window_content_type {
+    TEXT,
+    GRAPHICS
+};
+
 struct window {
     int x;
     int y;
@@ -46,6 +51,8 @@ struct window {
     bool exists;
     bool active;
     bool keep_on_top;
+    enum window_content_type content_type;
+    uint64_t *content_buffer;
     uint32_t color;
     uint32_t color_inactive;
     uint32_t border_color;
@@ -54,6 +61,7 @@ struct window {
     uint32_t text_color_inactive;
     uint32_t text_color_active;
 };
+
 
 
 

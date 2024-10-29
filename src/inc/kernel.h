@@ -37,7 +37,7 @@ inline atoi (const char *s)
     return n;
 }
 
-inline itoa (int n, char *s)
+inline char* itoa (int n, char *s)
 {
     int i = 0;
     while (n > 0)

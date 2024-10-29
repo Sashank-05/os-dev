@@ -17,7 +17,8 @@
         "cstdlib": "cpp",
         "global.h": "c",
         "boot.h": "c",
-        "window.h": "c"
+        "window.h": "c",
+        "err.h": "c"
     },
     "vscord.enabled": true
 }
