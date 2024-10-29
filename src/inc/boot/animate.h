@@ -3194,32 +3194,29 @@ inline void draw_pixel(unsigned int x, unsigned int y, uint32_t color)
 
 inline void draw_frame(int *frame_index)
 {
-    extern struct limine_framebuffer *framebuffer; // Assuming framebuffer is declared and defined elsewhere
+    extern struct limine_framebuffer *framebuffer;
 
     if (!framebuffer)
     {
-        return; // Handle framebuffer not available
+        return;
     }
 
-    uint32_t *buffer = (uint32_t *)framebuffer->address; // Cast the framebuffer address to uint32_t pointer
+    uint32_t *buffer = (uint32_t *)framebuffer->address;
 
-    // Calculate starting position for the lower quarter of the screen
-    int start_y = framebuffer->height * 3 / 4; // Start from 3/4 of the height
-    int start_x = framebuffer->width / 2 - 32; // Center the frame (64 / 2) to the left
-    int frame_height = 64;                     // Fixed frame height
-    int frame_width = 64;                      // Fixed frame width
+    int start_y = framebuffer->height * 3 / 4;
+    int start_x = framebuffer->width / 2 - 32;
+    int frame_height = 64;
+    int frame_width = 64;
 
     for (int y = 0; y < frame_height; y++)
     {
         for (int x = 0; x < frame_width; x++)
         {
-            // Ensure pixel calculations are within framebuffer bounds
             if ((uint64_t)(start_y + y) < framebuffer->height && (uint64_t)(start_x + x) < framebuffer->width)
             {
-                size_t pixel_index = ((start_y + y) * framebuffer->pitch / 4) + (start_x + x); // Correct pixel index calculation
+                size_t pixel_index = ((start_y + y) * framebuffer->pitch / 4) + (start_x + x);
 
-                // Set framebuffer pixel based on frame data
-                buffer[pixel_index] = frames[*frame_index][y][x] ? 0x0 : 0xFFFFFF; // Black or white
+                buffer[pixel_index] = frames[*frame_index][y][x] ? 0x0 : 0xFFFFFF;
             }
         }
     }

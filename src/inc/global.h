@@ -43,6 +43,9 @@ struct window {
     int border;
     char *content;
     char *title;
+    bool exists;
+    bool active;
+    bool keep_on_top;
     uint32_t color;
     uint32_t color_inactive;
     uint32_t border_color;
