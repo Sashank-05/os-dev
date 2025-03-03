@@ -23,11 +23,24 @@ fi
 #make clean
 #rm -rf iso_root 
 #rm -rf obj
+qemu-system-x86_64 \
+    -cdrom image.iso \
+    -m 8G \
+    -no-reboot \
+    -no-shutdown \
+    -cpu qemu64,+la57 \
+    -machine pc,acpi=on \
+    -serial stdio \
+    -smp 4 \
+    -rtc base=localtime,clock=host \
+    -vga std \
+    -device VGA,vgamem_mb=128 \
+    -display gtk,zoom-to-fit=off \
+    -drive if=pflash,format=raw,unit=0,file=/usr/share/OVMF/OVMF_CODE.fd \
+    -drive if=pflash,format=raw,unit=1,file=/usr/share/OVMF/OVMF_VARS.fd
+    #-D qemu.log
+    #   -d int,cpu_reset \
+#-drive file=fat:rw:\hdd,id=fat32,format=raw,if=none \
 
-qemu-system-x86_64 -cdrom image.iso -m 4G -smp 2 \
--display sdl,gl=on -vga std \
--monitor stdio \
--drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE.fd \
--drive if=pflash,format=raw,file=/usr/share/OVMF/OVMF_VARS_4M.fd \
--boot d \
--rtc base=localtime,clock=host \
+
+
