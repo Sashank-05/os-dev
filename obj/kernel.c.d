@@ -6,7 +6,10 @@ obj/kernel.c.o: src/kernel.c src/include/common/init.h \
  src/include/drivers/acpi.h src/include/drivers/framebuffer.h \
  src/include/memory/pmm.h src/include/sync/spinlock.h \
  src/include/debug/panic.h src/include/reg.h src/include/memory/kheap.h \
- src/include/memory/paging.h
+ src/include/common/gdt.h src/include/memory/paging.h \
+ src/include/fs/vfs.h src/include/net/net.h src/include/syscall/syscall.h \
+ src/include/interrupts/idt.h src/include/process/process.h \
+ src/include/sch/sch.h src/include/asm/asmcalls.h
 src/include/common/init.h:
 src/include/common/../limine.h:
 src/include/limine.h:
@@ -24,4 +27,12 @@ src/include/sync/spinlock.h:
 src/include/debug/panic.h:
 src/include/reg.h:
 src/include/memory/kheap.h:
+src/include/common/gdt.h:
 src/include/memory/paging.h:
+src/include/fs/vfs.h:
+src/include/net/net.h:
+src/include/syscall/syscall.h:
+src/include/interrupts/idt.h:
+src/include/process/process.h:
+src/include/sch/sch.h:
+src/include/asm/asmcalls.h:

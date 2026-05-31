@@ -118,7 +118,52 @@ typedef struct
   GenericAddressStructure X_GPE1Block;
 } __attribute__((packed)) FADT;
 
+// MADT (Multiple APIC Description Table) structures
+typedef struct {
+  uint8_t entry_type;
+  uint8_t record_length;
+} __attribute__((packed)) MADTEntryHeader;
 
+typedef struct {
+  MADTEntryHeader header;
+  uint8_t acpi_processor_uid;
+  uint8_t apic_id;
+  uint32_t flags;
+} __attribute__((packed)) ProcessorLocalAPIC;
+
+typedef struct {
+  MADTEntryHeader header;
+  uint8_t ioapic_id;
+  uint8_t reserved;
+  uint32_t ioapic_addr;
+  uint32_t global_system_interrupt_base;
+} __attribute__((packed)) IOApic;
+
+typedef struct {
+  ISDTHeader header;
+  uint32_t local_apic_addr;
+  uint32_t flags;
+  MADTEntryHeader entries[0];
+} __attribute__((packed)) MADT;
+
+// MADT entry type constants
+#define PROCESSOR_LOCAL_APIC 0
+#define IOAPIC 1
+#define INTERRUPT_SOURCE_OVERRIDE 2
+#define NMI_SOURCE 3
+#define LOCAL_APIC_NMI 4
+#define LOCAL_APIC_ADDRESS_OVERRIDE 5
+#define IO_SAPIC 6
+#define LOCAL_SAPIC 7
+#define PLATFORM_INTERRUPT_SOURCES 8
+#define PROCESSOR_LOCAL_X2APIC 9
+#define LOCAL_X2APIC_NMI 10
+#define GENERIC_INTERRUPT_CONTROLLER 11
+#define GENERIC_INTERRUPT_CONTROLLER_MSI_FRAME 12
+
+// MADT constants
+#define LOCAL_APIC 0
+#define LOCAL_APIC_ADDRESS 0xFEE00000
 
 extern struct OSinfo osinfo;
 

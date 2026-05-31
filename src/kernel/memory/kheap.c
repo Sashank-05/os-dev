@@ -34,7 +34,7 @@ void kheap_init(void) {
     
     // Allocate initial heap space (4MB)
     uint64_t pages = 1024;
-    uintptr_t phys = pmm_alloc_pages(pages);
+    uintptr_t phys = (uintptr_t)pmm_alloc_pages(pages);
     
     if (!phys) {
 //        printk(GFX_RED, "Failed to allocate physical pages for heap\n");
@@ -69,7 +69,7 @@ static kPool_t* find_free_pool(uint64_t size) {
 
 static kPool_t* create_new_pool(uint64_t size) {
     uint64_t pages = (size + 4095) / 4096;
-    uintptr_t phys = pmm_alloc_pages(pages);
+    uintptr_t phys = (uintptr_t)pmm_alloc_pages(pages);
     
     if (!phys) return NULL;
     

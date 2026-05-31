@@ -254,7 +254,11 @@ void map_sections(uint64_t* pml4) {
                 (unsigned long long)memmap_entries[entry]->length,
                 (unsigned long long)memmap_entries[entry]->base);
              The virtual address is set to physical base + HHDM offset */
-            map_pages(pml4, memmap_entries[entry]->base + osinfo.hhdm, memmap_entries[entry]->base, memmap_entries[entry]->length / 4096, KERNEL_PFLAG_PRESENT | KERNEL_PFLAG_WRITE);
+            uint64_t flags = KERNEL_PFLAG_PRESENT | KERNEL_PFLAG_WRITE;
+            if (entry_type == LIMINE_MEMMAP_FRAMEBUFFER) {
+                flags |= KERNEL_PFLAG_USER;
+            }
+            map_pages(pml4, memmap_entries[entry]->base + osinfo.hhdm, memmap_entries[entry]->base, memmap_entries[entry]->length / 4096, flags);
 
         }
     }
@@ -283,7 +287,16 @@ void map_kernel(uint64_t* pml4) {
         KERNEL_PFLAG_PRESENT | KERNEL_PFLAG_WRITE);
 
     /* Map the kernel's stack */
-    alloc_pages(pml4, KERNEL_STACK_ADDR, KERNEL_STACK_PAGES, KERNEL_PFLAG_PRESENT | KERNEL_PFLAG_WRITE);
+    if (osinfo.cr3 != 0) {
+        uint64_t* current_pml4 = (uint64_t*)(osinfo.cr3 + osinfo.hhdm);
+        for (uint64_t i = 0; i < KERNEL_STACK_PAGES; i++) {
+            uint64_t vaddr = KERNEL_STACK_ADDR + i * PAGE_SIZE;
+            uint64_t paddr = virt_to_phys(current_pml4, vaddr);
+            map_pages(pml4, vaddr, paddr, 1, KERNEL_PFLAG_PRESENT | KERNEL_PFLAG_WRITE);
+        }
+    } else {
+        alloc_pages(pml4, KERNEL_STACK_ADDR, KERNEL_STACK_PAGES, KERNEL_PFLAG_PRESENT | KERNEL_PFLAG_WRITE);
+    }
 //    printk(GFX_WHITE, "Mapped kernel stack at 0x%x\n", KERNEL_STACK_ADDR);
 }
 

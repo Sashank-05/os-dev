@@ -1,0 +1,32 @@
+# Build artifacts
+obj/
+bin/
+*.o
+*.d
+*.a
+*.so
+
+# ISO and disk images
+*.iso
+*.img
+*.hdd
+initrd
+
+# Build output
+iso_root/
+
+# IDE
+.vscode/
+*.swp
+*.swo
+*~
+.idea/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Limine bootloader (can be downloaded)
+limine/limine-bios.sys
+limine/limine-cd.bin
+limine/limine-cd-efi.bin

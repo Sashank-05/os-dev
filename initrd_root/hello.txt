@@ -1,0 +1,2 @@
+OS initrd mounted successfully.
+This is a placeholder file in the initial ramdisk.

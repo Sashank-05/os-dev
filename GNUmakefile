@@ -5,14 +5,25 @@ MAKEFLAGS += -rR
 # Change as needed.
 override OUTPUT := sasos
 
+# Cross-compiler configuration
+# Usage: make CROSS=1 (to use x86_64-elf cross-compiler)
+CROSS ?= 0
+ifeq ($(CROSS),1)
+    export KCC := x86_64-elf-gcc
+    export KLD := x86_64-elf-ld
+else
+    export KCC ?= cc
+    export KLD ?= ld
+endif
+
 # Convenience macro to reliably declare user overridable variables.
 override USER_VARIABLE = $(if $(filter $(origin $(1)),default undefined),$(eval override $(1) := $(2)))
 
 # User controllable C compiler command.
-$(call USER_VARIABLE,KCC,cc)
+$(call USER_VARIABLE,KCC,$(KCC))
 
 # User controllable linker command.
-$(call USER_VARIABLE,KLD,ld)
+$(call USER_VARIABLE,KLD,$(KLD))
 
 # User controllable C flags.
 $(call USER_VARIABLE,KCFLAGS,-g -O2 -pipe)
@@ -69,7 +80,7 @@ override KLDFLAGS += \
 
 # Use "find" to glob all *.c, *.S, and *.asm files in the tree and obtain the
 # object and header dependency file names.
-override CFILES := $(shell cd src && find -L * -type f -name '*.c' | LC_ALL=C sort)
+override CFILES := $(shell cd src && find -L * -type f -name '*.c' ! -path '*/acpi_t/*' | LC_ALL=C sort)
 override ASFILES := $(shell cd src && find -L * -type f -name '*.S' | LC_ALL=C sort)
 override NASMFILES := $(shell cd src && find -L * -type f -name '*.asm' | LC_ALL=C sort)
 override OBJ := src/include/font_unifont.o $(addprefix obj/,$(CFILES:.c=.c.o) $(ASFILES:.S=.S.o) $(NASMFILES:.asm=.asm.o))

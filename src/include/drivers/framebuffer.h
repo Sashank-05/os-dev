@@ -57,7 +57,7 @@ void framebuffer_move_one_row_up(void);
 void framebuffer_print_char(uint32_t unicode_character, int x, int y, uint32_t foreground_color);
 void framebuffer_print_string(char* string, uint32_t foreground_color);
 
-//void printk(uint32_t color, const char* format, ...);
+void printk(uint32_t color, const char* format, ...);
 
 
 #endif

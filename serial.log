@@ -1,0 +1,53 @@
+[37m=== System Information ===
+[37mCompiled on: May  3 2026 at 11:20:40
+[37mBoot time: 1777807267
+[37mCPU Cores: 4
+[37mFramebuffer: 1280x800, 32 BPP
+[37mTotal Memory: 8593498112 bytes
+[37mFree Memory: 0 bytes
+[37m=======================
+[36m┌───────────────────── Memory Map ────────────────────────┐
+[36m├──────┬────────────────────┬────────────────────┬────────┤
+[37m│ ID   │      Base          │     Length         │  Type  │
+[36m├──────┼────────────────────┼────────────────────┼────────┤
+[32m│ 0    │ 0x000000001000     │ 0x000000053000     │ BOOT   │
+[32m│ 1    │ 0x000000054000     │ 0x00000004b000     │ FREE   │
+[32m│ 2    │ 0x00000009fc00     │ 0x000000000400     │ RESV   │
+[32m│ 3    │ 0x0000000f0000     │ 0x000000010000     │ RESV   │
+[32m│ 4    │ 0x000000100000     │ 0x0000bf9ff000     │ FREE   │
+[32m│ 5    │ 0x0000bfaff000     │ 0x000000046000     │ BOOT   │
+[32m│ 6    │ 0x0000bfb45000     │ 0x0000001e0000     │ KERN   │
+[32m│ 7    │ 0x0000bfd25000     │ 0x0000002bb000     │ BOOT   │
+[32m│ 8    │ 0x0000bffe0000     │ 0x000000020000     │ RESV   │
+[32m│ 9    │ 0x0000fd000000     │ 0x0000003e8000     │ FB     │
+[32m│ 10   │ 0x0000fffc0000     │ 0x000000040000     │ RESV   │
+[32m│ 11   │ 0x000100000000     │ 0x000140000000     │ FREE   │
+[32m│ 12   │ 0x00fd00000000     │ 0x000300000000     │ RESV   │
+[36m└──────┴────────────────────┴────────────────────┴────────┘
+PMM initialized: 2096542 pages, Bitmap at 0xFFFF800100000000 (256 KB)PMM initialized successfully
+Kernel heap initialized successfully
+
+CR3 switched & TLB flushed
+Paging initialized successfully
+Initializing VFS
+Initializing networking
+Initializing GDT
+Initializing syscall ABI
+Initializing interrupts
+Initializing TSS
+GDT/TSS initialized successfully
+Enabling interrupts
+pci 00:00.0 vendor=8086 device=1237 class=06 subclass=00 prog_if=00
+pci 00:01.0 vendor=8086 device=7000 class=06 subclass=01 prog_if=00
+pci 00:01.1 vendor=8086 device=7010 class=01 subclass=01 prog_if=80
+pci 00:01.3 vendor=8086 device=7113 class=06 subclass=80 prog_if=00
+pci 00:02.0 vendor=1234 device=1111 class=03 subclass=00 prog_if=00
+pci 00:03.0 vendor=8086 device=100e class=02 subclass=00 prog_if=00
+pci: discovered 6 devices
+Network stack initialized with loopback
+Syscall ABI initialized
+ACPI initialized successfully
+Bootstrapping userspace init
+KERNEL PANIC: Failed to load userspace init ELF image
+
+System halted

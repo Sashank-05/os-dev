@@ -12,14 +12,23 @@
 #include <libk/stdio.h>
 #include <debug/panic.h>
 #include <memory/kheap.h>
+#include <common/gdt.h>
 #include <memory/paging.h>
 #include <reg.h>
 #include <drivers/acpi.h>
+#include <fs/vfs.h>
+#include <net/net.h>
+#include <syscall/syscall.h>
+#include <process/process.h>
+#include <libk/stdio.h>
+#include <interrupts/idt.h>
+#include <asm/asmcalls.h>
+
 
 struct OSinfo osinfo;
 
 unsigned long long total_mem(struct limine_memmap_response* memmap) {
-    const char* valid_types[] = { LIMINE_MEMMAP_USABLE, LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE, LIMINE_MEMMAP_KERNEL_AND_MODULES, LIMINE_MEMMAP_FRAMEBUFFER, LIMINE_MEMMAP_ACPI_RECLAIMABLE};
+    const uint64_t valid_types[] = { LIMINE_MEMMAP_USABLE, LIMINE_MEMMAP_BOOTLOADER_RECLAIMABLE, LIMINE_MEMMAP_KERNEL_AND_MODULES, LIMINE_MEMMAP_FRAMEBUFFER, LIMINE_MEMMAP_ACPI_RECLAIMABLE};
     unsigned long long total = 0;
     for (size_t i = 0; i < memmap->entry_count; i++) {
         struct limine_memmap_entry* entry = memmap->entries[i];
@@ -89,24 +98,45 @@ void print_system_info(void) {
 
 
 void kmain(void){
+    disable_interrupts();
     init_kernel();
-    struct reg_state_t regs;
     framebuffer_init(GFX_BLACK);
     serial_init(COM1);
 
     print_system_info();
 
     pmm_init();
-    log(INFO, "PMM initialized successfully\n");
+    debug("PMM initialized successfully\n");
 
     kheap_init();
-    log(INFO, "Kernel heap initialized successfully\n");
+    debug("Kernel heap initialized successfully\n");
 
     init_paging();
-    log(INFO, "Paging initialized successfully\n");
+    debug("Paging initialized successfully\n");
+    debug("Initializing VFS\n");
+
+    debug("Initializing networking\n");
+    debug("Initializing GDT\n");
+    debug("Initializing syscall ABI\n");
+    gdt_init();
+    debug("Initializing interrupts\n");
+    debug("Initializing TSS\n");
+    tss_init(KERNEL_STACK_PTR);
+    debug("GDT/TSS initialized successfully\n");
+
+    vfs_init();
+    debug("Enabling interrupts\n");
+    net_init();
+    syscall_init();
+    interrupts_init();
 
     init_acpi();
-    log(INFO, "ACPI initialized successfully\n");
+    debug("ACPI initialized successfully\n");
+
+    enable_interrupts();
+
+    debug("Bootstrapping userspace init\n");
+    process_bootstrap();
 
     while (1) {
         __asm__ __volatile__("hlt");

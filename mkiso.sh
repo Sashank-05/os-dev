@@ -7,9 +7,19 @@ make -C limine
 # Create a directory which will be our ISO root.
 mkdir -p iso_root
 
+# Build the userspace init ELF.
+mkdir -p initrd_root
+cc -nostdlib -ffreestanding -fno-stack-protector -fno-pie -no-pie \
+	-Wl,-T,userspace/linker.ld -Wl,-e,_start \
+	-o initrd_root/init userspace/init.c
+
+# Build the initrd archive used by the kernel VFS.
+tar -cf initrd -C initrd_root .
+
 # Copy the relevant files over.
 mkdir -p iso_root/boot
 cp -v bin/sasos iso_root/boot/
+cp -v initrd iso_root/
 mkdir -p iso_root/boot/limine
 cp -v limine.conf limine/limine-bios.sys limine/limine-bios-cd.bin \
 limine/limine-uefi-cd.bin iso_root/boot/limine/
